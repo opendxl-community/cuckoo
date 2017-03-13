@@ -1,0 +1,31 @@
+<section id="tie">
+    <div class="section-title">
+        <h4>McAfee TIE</h4>
+    </div>
+
+	{%if results.tie %}
+	<small>
+                McAfee TIE discovered the following reputation results:
+	</small>
+	<table class="table table-striped table-bordered">
+        	<colgroup>
+            		<col width="250" />
+            		<col width="*" />
+        	</colgroup>
+ 	
+		{% for tieresultkey in results.tie %}
+		<TR>
+			<TH>{{results.tie[tieresultkey]['title']}}</TH>
+			<TD><span class="mono">{{results.tie[tieresultkey]['value']}}</span></TD>
+		</TR>
+		{% endfor %}
+	</table>
+		
+
+	{% else %}
+
+		No TIE results available.
+
+	{% endif %}
+
+</section>
