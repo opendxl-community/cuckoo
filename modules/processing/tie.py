@@ -12,10 +12,10 @@ import base64
 log = logging.getLogger(__name__)
 
 #cuckoo imports
-from lib.cuckoo.common.abstracts import Processing
-from lib.cuckoo.common.objects import File
-from lib.cuckoo.common.exceptions import CuckooOperationalError
-from lib.cuckoo.common.exceptions import CuckooProcessingError
+from cuckoo.common.abstracts import Processing
+from cuckoo.common.objects import File
+from cuckoo.common.exceptions import CuckooOperationalError
+from cuckoo.common.exceptions import CuckooProcessingError
 
 
 #DXL and TIE imports
@@ -27,7 +27,7 @@ from dxltieclient.constants import HashType, ReputationProp, FileProvider, FileE
 
 # Config file name and location
 CONFIG_FILE_NAME = "dxlclient.config"
-CONFIG_FILE = "/opt/opendxl/examples/" + CONFIG_FILE_NAME
+CONFIG_FILE = "/etc/opendxl/" + CONFIG_FILE_NAME
 # Create DXL configuration from file
 config = DxlClientConfig.create_dxl_config_from_file(CONFIG_FILE)
 
@@ -108,21 +108,23 @@ class TIE(Processing):
                 #initialize result array and tiekey counter for each result
                 proc_result = {}
                 tiekey = 0
-
+		strtiekey = str(tiekey)
                 # Display the Global Threat Intelligence 
                 if FileProvider.GTI in reputations_dict:
                     gti_rep = reputations_dict[FileProvider.GTI]
-                    proc_result[tiekey]={}
-                    proc_result[tiekey]['title']="Global Threat Intelligence (GTI) Test Date:"
-                    proc_result[tiekey]['value']= EpochMixin.to_localtime_string(gti_rep[ReputationProp.CREATE_DATE])
+                    proc_result[strtiekey]={}
+                    proc_result[strtiekey]['title']="Global Threat Intelligence (GTI) Test Date:"
+                    proc_result[strtiekey]['value']= EpochMixin.to_localtime_string(gti_rep[ReputationProp.CREATE_DATE])
                     tiekey += 1
+                    strtiekey = str(tiekey)
 
                     #Set GTI Trust Level
-                    proc_result[tiekey]={}
-                    proc_result[tiekey]['title']="Global Threat Intelligence (GTI) trust level:"
+                    proc_result[strtiekey]={}
+                    proc_result[strtiekey]['title']="Global Threat Intelligence (GTI) trust level:"
                     trustValue=gti_rep[ReputationProp.TRUST_LEVEL]
-                    proc_result[tiekey]['value']= self.trustLevel(trustValue)
+                    proc_result[strtiekey]['value']= self.trustLevel(trustValue)
                     tiekey += 1
+                    strtiekey = str(tiekey)
 
 
 
@@ -135,17 +137,19 @@ class TIE(Processing):
 
                     # Display prevalence (if it exists)
                     if FileEnterpriseAttrib.PREVALENCE in ent_rep_attribs:
-                        proc_result[tiekey]={}
-                        proc_result[tiekey]['title'] = "Enterprise prevalence:"
-                        proc_result[tiekey]['value'] =  ent_rep_attribs[FileEnterpriseAttrib.PREVALENCE]
+                        proc_result[strtiekey]={}
+                        proc_result[strtiekey]['title'] = "Enterprise prevalence:"
+                        proc_result[strtiekey]['value'] =  ent_rep_attribs[FileEnterpriseAttrib.PREVALENCE]
                         tiekey += 1
+                        strtiekey = str(tiekey)
 
                     # Display first contact date (if it exists)
                     if FileEnterpriseAttrib.FIRST_CONTACT in ent_rep_attribs:
-                        proc_result[tiekey]={}
-                        proc_result[tiekey]['title'] =  "First contact: "
-                        proc_result[tiekey]['value'] =  FileEnterpriseAttrib.to_localtime_string(ent_rep_attribs[FileEnterpriseAttrib.FIRST_CONTACT])
+                        proc_result[strtiekey]={}
+                        proc_result[strtiekey]['title'] =  "First contact: "
+                        proc_result[strtiekey]['value'] =  FileEnterpriseAttrib.to_localtime_string(ent_rep_attribs[FileEnterpriseAttrib.FIRST_CONTACT])
                         tiekey += 1
+                        strtiekey = str(tiekey)
 
 
                 #These are lookup conversions for the ATD trust_score
@@ -167,38 +171,43 @@ class TIE(Processing):
                     # Retrieve the ATD reputation attributes
                     atd_rep_attribs = atd_rep[ReputationProp.ATTRIBUTES]
 
-                    proc_result[tiekey]={}
-                    proc_result[tiekey]['title'] = "ATD Test Date: "
-                    proc_result[tiekey]['value']= EpochMixin.to_localtime_string(atd_rep[ReputationProp.CREATE_DATE])
+                    proc_result[strtiekey]={}
+                    proc_result[strtiekey]['title'] = "ATD Test Date: "
+                    proc_result[strtiekey]['value']= EpochMixin.to_localtime_string(atd_rep[ReputationProp.CREATE_DATE])
                     tiekey += 1
+                    strtiekey = str(tiekey)
 
                     # Display GAM Score (if it exists)
                     if AtdAttrib.GAM_SCORE in atd_rep_attribs:
-                        proc_result[tiekey]={}
-                        proc_result[tiekey]['title'] = "ATD Gateway AntiMalware Score: "
-                        proc_result[tiekey]['value'] =  valueDict[atd_rep_attribs[AtdAttrib.GAM_SCORE]]
+                        proc_result[strtiekey]={}
+                        proc_result[strtiekey]['title'] = "ATD Gateway AntiMalware Score: "
+                        proc_result[strtiekey]['value'] =  valueDict[atd_rep_attribs[AtdAttrib.GAM_SCORE]]
                         tiekey += 1
+                        strtiekey = str(tiekey)
 
                     # Display AV Engine Score (if it exists)
                     if AtdAttrib.AV_ENGINE_SCORE in atd_rep_attribs:
-                        proc_result[tiekey]={}
-                        proc_result[tiekey]['title'] = "ATD AV Engine Score: "
-                        proc_result[tiekey]['value'] = valueDict[atd_rep_attribs[AtdAttrib.AV_ENGINE_SCORE]]
+                        proc_result[strtiekey]={}
+                        proc_result[strtiekey]['title'] = "ATD AV Engine Score: "
+                        proc_result[strtiekey]['value'] = valueDict[atd_rep_attribs[AtdAttrib.AV_ENGINE_SCORE]]
                         tiekey += 1
+                        strtiekey = str(tiekey)
 
                     # Display Sandbox Score (if it exists)
                     if AtdAttrib.SANDBOX_SCORE in atd_rep_attribs:
-                        proc_result[tiekey]={}
-                        proc_result[tiekey]['title'] = "ATD Sandbox Score: "
-                        proc_result[tiekey]['value'] = valueDict[atd_rep_attribs[AtdAttrib.SANDBOX_SCORE]]
+                        proc_result[strtiekey]={}
+                        proc_result[strtiekey]['title'] = "ATD Sandbox Score: "
+                        proc_result[strtiekey]['value'] = valueDict[atd_rep_attribs[AtdAttrib.SANDBOX_SCORE]]
                         tiekey += 1
+                        strtiekey = str(tiekey)
 
                     # Display Verdict (if it exists)
                     if AtdAttrib.VERDICT in atd_rep_attribs:
-                        proc_result[tiekey]={}
-                        proc_result[tiekey]['title'] = "ATD Verdict: "
-                        proc_result[tiekey]['value'] = valueDict[atd_rep_attribs[AtdAttrib.VERDICT]]
+                        proc_result[strtiekey]={}
+                        proc_result[strtiekey]['title'] = "ATD Verdict: "
+                        proc_result[strtiekey]['value'] = valueDict[atd_rep_attribs[AtdAttrib.VERDICT]]
                         tiekey += 1
+                        strtiekey = str(tiekey)
 
                 results=proc_result
 
