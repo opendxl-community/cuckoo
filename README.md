@@ -1,6 +1,6 @@
 # Cuckoo integration with DXL
 
-##Overview
+## Overview
 The OpenDXL Cuckoo integration allows the Cuckoo analysis engine to query McAfee TIE over DXL for 
 file reputation values. That information is included in the Cuckoo results array. Additionally, 
 Cuckoo reporting is updated to include results in the HTML report.
@@ -8,7 +8,7 @@ Cuckoo reporting is updated to include results in the HTML report.
 The Processing module works on Cuckoo 1 and 2. The reporting tieupdate module only works on Cuckoo 2.
 Follow version specific instruction for updating the processing and reporting modules.
 
-##Prerequisites
+## Prerequisites
 * The integration requires a successful installation of Cuckoo. 
 * Install the required dependencies with the requirements.txt file on the system that is running Cuckoo.
     ```sh
@@ -16,7 +16,7 @@ Follow version specific instruction for updating the processing and reporting mo
     ```
     This will install the dxlclient and the dxltieclient modules.
     
-##Installation
+## Installation
 * Download the [Latest Release](https://github.com/opendxl-community/cuckoo/releases)
     Extract the release .zip file.
 * Follow the steps for [Certificate creation](https://opendxl.github.io/opendxl-client-python/pydoc/certcreation.html) 
