@@ -8,8 +8,7 @@ Cuckoo reporting is updated to include results in the HTML report.
 The Processing module works on Cuckoo 1 and 2. The reporting tieupdate module only works on Cuckoo 2.
 Follow version specific instruction for updating the processing and reporting modules.
 
-
-#Prerequisites
+##Prerequisites
 * The integration requires a successful installation of Cuckoo. 
 * Install the required dependencies with the requirements.txt file on the system that is running Cuckoo.
     ```sh
@@ -60,7 +59,7 @@ processing modules and the [wiki](https://github.com/opendxl-community/cuckoo/wi
 * Restart Cuckoo.
 
 ## Usage
-* Start Cuckoo
+* Start Cuckoo.
 * Start the [Cuckoo Web interface](http://docs.cuckoosandbox.org/en/latest/usage/web/).    
 * Start [Cuckoo API Server](http://docs.cuckoosandbox.org/en/latest/usage/api/) to view the TIE reports via REST API.
 * Submit samples to Cuckoo via CLI or the UI and view the [TIE Reputation](https://github.com/opendxl-community/cuckoo/wiki) reports.
