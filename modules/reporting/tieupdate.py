@@ -2,9 +2,6 @@
 
 import calendar
 import datetime
-import json
-import logging
-import os
 
 from cuckoo.common.abstracts import Report
 from cuckoo.common.exceptions import CuckooReportError
