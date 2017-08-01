@@ -2,26 +2,21 @@
 #
 
 import logging
-import os
 
 #These are required for DXL integration
-import sys
 import json
-import base64
 
 log = logging.getLogger(__name__)
 
 #cuckoo imports
 from cuckoo.common.abstracts import Processing
 from cuckoo.common.objects import File
-from cuckoo.common.exceptions import CuckooOperationalError
 from cuckoo.common.exceptions import CuckooProcessingError
 
 
 #DXL and TIE imports
 from dxlclient.client import DxlClient
 from dxlclient.client_config import DxlClientConfig
-from dxlclient.message import Message, Request
 from dxltieclient import TieClient
 from dxltieclient.constants import HashType, ReputationProp, FileProvider, FileEnterpriseAttrib, CertProvider, CertEnterpriseAttrib, AtdAttrib, TrustLevel, EpochMixin
 
@@ -66,9 +61,6 @@ class TIE(Processing):
         else:
             return "Not Set"
 
-        return "Not Set"
-
-
     def run(self):
 
         """Runs TIE processing
@@ -102,13 +94,13 @@ class TIE(Processing):
                         HashType.SHA256: sha256_hex
                         })
 
-				#debug
+                #debug
                 log.info("Raw TIE results: " + json.dumps(reputations_dict, sort_keys=True, indent=4, separators=(',', ': ')))
 
                 #initialize result array and tiekey counter for each result
                 proc_result = {}
                 tiekey = 0
-		strtiekey = str(tiekey)
+                strtiekey = str(tiekey)
                 # Display the Global Threat Intelligence 
                 if FileProvider.GTI in reputations_dict:
                     gti_rep = reputations_dict[FileProvider.GTI]
@@ -125,8 +117,6 @@ class TIE(Processing):
                     proc_result[strtiekey]['value']= self.trustLevel(trustValue)
                     tiekey += 1
                     strtiekey = str(tiekey)
-
-
 
                 # Display the Enterprise reputation information
                 if FileProvider.ENTERPRISE in reputations_dict:
